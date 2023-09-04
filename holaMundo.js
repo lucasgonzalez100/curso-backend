@@ -1,11 +1,14 @@
-import express from 'express';
+const express = require('express');
+const http = require('http');
 
-const { response } = require('express');
-const http = require ('http');
-const server = http.createServer ((request, response)=>{
-    response.end ("este es mi primer hola mundo de backend" )
-})
+const app = express();
 
-server.listen (8080,()=>{
-    console.log ("listening on port 8080")
+app.get('/', (req, res) => {
+    res.send('Este es mi primer "Hola Mundo" de backend');
+});
+
+const server = http.createServer(app);
+
+server.listen(8080, () => {
+    console.log('Escuchando en el puerto 8080');
 });

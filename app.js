@@ -1,5 +1,18 @@
 const fs = require('fs');
 
+const express = require('express');
+const http = require('http');
+
+const app = express();
+
+
+
+const server = http.createServer(app);
+
+server.listen(8080, () => {
+    console.log('Escuchando en el puerto 8080');
+});
+
 class ProductManager {
     constructor(filePath) {
         this.path = filePath;
@@ -132,6 +145,26 @@ productManager.updateProduct(2, {
     price: 55.00
 });
 
-productManager.deleteProduct(1);
+app.get('/', (req, res) => {
+    res.send( ' esta es la pag principal ');
+});
 
-console.log("Lista de productos finales:", productManager.getProducts());
+
+app.get('/productos', (req, res) => {
+   
+    res.send (productManager.getProducts());
+});
+
+app.get('/productos/:id', (req, res) => {
+
+    const productId = productManager.getProductById(parseInt(req.params.id));
+    
+        if (!productId) {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+        res.send (productId);
+  });
+
+// productManager.deleteProduct(1);
+
+// console.log("Lista de productos finales:", productManager.getProducts());
