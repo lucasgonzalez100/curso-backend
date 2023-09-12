@@ -37,13 +37,23 @@ app.get('/productos/:id', (req, res) => {
 });
 
 app.delete ('/productos/delete/:id', (req, res)=>{
-   if(productManager.getProductById){
-    productManager.deleteProduct(parseInt(req.params.id));
-    return res.status(200).json({ mensaje: 'Producto borrado' });
-   }
-   else {
-    return res.status(404).json({ mensaje: 'Producto no encontrado' });
-}
+    const productId = parseInt(req.params.id);
+    const deletedProduct = producrManager.getProductById(productId);
+    if (deletedProduct){
+        productManager.deleteProduct(productId);
+        return res.status(200).json({ mensaje: 'Producto borrado' });
+    } else {
+        return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+    
+
+//    if(productManager.getProductById){
+//     productManager.deleteProduct(parseInt(req.params.id));
+//     return res.status(200).json({ mensaje: 'Producto borrado' });
+//    }
+//    else {
+//     return res.status(404).json({ mensaje: 'Producto no encontrado' });
+// }
 });
 
 
