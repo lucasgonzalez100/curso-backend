@@ -61,6 +61,10 @@ class carts {
         this.loadCarts();
         return this.carts;
     }
+
+    cartExists(cartId) {
+        return this.carts.some(cart => cart.id === cartId);
+    }
 }
 
 
