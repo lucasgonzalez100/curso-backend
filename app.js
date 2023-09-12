@@ -1,189 +1,74 @@
 const fs = require('fs');
 const express = require('express');
 const { cartManager, router } = require("./carts.js");
+const { productManager } = require("./productManager.js");
 const http = require('http');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/carts.json', router); 
+app.use('/carts.json', router);
+app.use('/archivo.json', router);
 const server = http.createServer(app);
 
 server.listen(8080, () => {
     console.log('Escuchando en el puerto 8080');
 });
 
-class ProductManager {
-    constructor(filePath) {
-        this.path = filePath;
-        this.products = [];
-        this.nextId = 1;
-
-        this.loadProducts();
-    }
-
-    loadProducts() {
-        try {
-            const data = fs.readFileSync(this.path, 'utf8');
-            this.products = JSON.parse(data);
-            this.nextId = this.products.length + 1;
-        } catch (error) {
-            this.products = [];
-        }
-    }
-
-    saveProducts() {
-        fs.writeFileSync(this.path, JSON.stringify(this.products), 'utf8');
-    }
-
-    addProduct(product) {
-        if (!product.title || !product.description || !product.price || !product.thumbnail
-            || !product.code || !product.stock) {
-            console.log("Todos los campos son obligatorios");
-            return;
-        }
-
-        const existingProduct = this.products.find(existingProduct => existingProduct.code === product.code);
-        if (existingProduct) {
-            console.log("El codigo del producto ya existe");
-            return;
-        }
-
-        const newProduct = {
-            ...product,
-            id: this.nextId
-        };
-        this.products.push(newProduct);
-        this.nextId++;
-
-        this.saveProducts();
-
-        console.log("Producto agregado:", newProduct);
-    }
-
-    getProducts() {
-        this.loadProducts(); 
-        return this.products;
-    }
-
-    getProductById(id) {
-        this.loadProducts(); 
-        const product = this.products.find(existingProduct => existingProduct.id === id);
-        if (product) {
-            return product;
-        } else {
-            console.log("Producto no encontrado");
-            return null;
-        }
-    }
-    
-    updateProduct(id, updatedFields) {
-        const productIndex = this.products.findIndex(product => product.id === id);
-        if (productIndex !== -1) {
-            this.products[productIndex] = {
-                ...this.products[productIndex],
-                ...updatedFields
-            };
-            this.saveProducts();
-            console.log("Producto actualizado:", this.products[productIndex]);
-        } else {
-            console.log("Producto no encontrado");
-        }
-    }
-
-    deleteProduct(id) {
-        const productIndex = this.products.findIndex(product => product.id === id);
-        if (productIndex !== -1) {
-            const deletedProduct = this.products.splice(productIndex, 1)[0];
-            this.saveProducts();
-            console.log("Producto eliminado:", deletedProduct);
-        } else {
-            console.log("Producto no encontrado");
-        }
-    }
-}
-
-const productManager = new ProductManager('./archivo.json');
-
-
-// productManager.addProduct({
-//     title: "Producto 1",
-//     description: "Descripcion de producto 1",
-//     price: 39.50,
-//     thumbnail: "ruta/imagen1.jpg",
-//     code: "P1",
-//     stock: 10
-// });
-
-// productManager.addProduct({
-//     title: "Producto 2",
-//     description: "Descripcion de producto 2",
-//     price: 50.80,
-//     thumbnail: "ruta/imagen2.jpg",
-//     code: "P2",
-//     stock: 5
-// });
-
-// productManager.addProduct({
-//     title: "Producto 3",
-//     description: "Descripcion de producto 3",
-//     price: 60,
-//     thumbnail: "ruta/imagen3.jpg",
-//     code: "P3",
-//     stock: 8
-// });
-
-// console.log("Lista de productos:", productManager.getProducts());
-
-// const productById = productManager.getProductById(3);
-// if (productById) {
-//     console.log("Producto encontrado", productById);
-// }
-
-// productManager.updateProduct(2, {
-//     title: "Producto 2 Actualizado",
-//     price: 55.00
-// });
+// manejo de products-----------------
 
 app.get('/', (req, res) => {
-    res.send( ' esta es la pag principal ');
+    res.send(' esta es la pag principal ');
 });
 
-
 app.get('/productos', (req, res) => {
-   
-    res.send (productManager.getProducts());
+
+    res.send(productManager.getProducts());
 });
 
 app.get('/productos/:id', (req, res) => {
 
     const productId = productManager.getProductById(parseInt(req.params.id));
-    
-        if (!productId) {
+      if (!productId) {
         return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
-        res.send (productId);
-  });
+    res.send(productId);
+});
+
+app.delete ('/productos/delete/:id', (req, res)=>{
+
+    productManager.deleteProduct(parseInt(req.params.id));
+    return res.status(404).json({ mensaje: 'Producto borrado' });
+})
 
 
- 
+// manejo de carts---------------------
 
 app.post('/cart', (req, res) => {
-   
+
     cartManager.addCart();
     res.status(200).json({ success: 'El carrito fue creado' });
 });
 
+app.delete ('/cart/delete/:id', (req, res)=>{
+    const cartId = parseInt(req.params.id);
+    const deleted = cartManager.deleteCart(cartId);
+
+    if (deleted) {
+        return res.status(200).json({ mensaje: 'Carrito borrado exitosamente' });
+    } else {
+        return res.status(404).json({ mensaje: 'Carrito no encontrado' });
+    }
+    // cartManager.deleteCart(parseInt(req.params.id));
+    // return res.status(404).json({ mensaje: 'carrito borrado' });
+});
+
+
 
 
 app.get('/cart/view', (req, res) => {
-   
-    res.send (cartManager.getCart());
+
+    res.send(cartManager.getCart());
 });
 
-  
-
-// productManager.deleteProduct(1);
-
-// console.log("Lista de productos finales:", productManager.getProducts());
