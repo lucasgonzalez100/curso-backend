@@ -19,7 +19,11 @@ class ProductManager {
         try {
             const data = fs.readFileSync(this.path, 'utf8');
             this.products = JSON.parse(data);
-            this.nextId = this.products.length + 1;
+            if (this.products.length > 0) {
+                const maxId = Math.max(...this.products.map(product => product.id));
+                this.nextId = maxId + 1;
+                //  this.nextId = this.carts.length + 1;
+            }
         } catch (error) {
             this.products = [];
         }
@@ -44,7 +48,8 @@ class ProductManager {
 
         const newProduct = {
             ...product,
-            id: this.nextId
+            id: this.nextId,
+            status: true
         };
         this.products.push(newProduct);
         this.nextId++;
@@ -68,6 +73,10 @@ class ProductManager {
             console.log("Producto no encontrado");
             return null;
         }
+    }
+
+    getProductByCode(productCode) {
+        return this.products.find(product => product.code === productCode);
     }
 
     updateProduct(id, updatedFields) {
