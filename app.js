@@ -177,10 +177,10 @@ app.post('/cart', (req, res) => {
 
 
 
-// app.get('/cart', (req, res) => {
+app.get('/cart/view', (req, res) => {
    
-//     res.send (cartManager.getCart());
-// });
+    res.send (cartManager.getCart());
+});
 
   
 
