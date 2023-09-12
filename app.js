@@ -1,12 +1,13 @@
 const fs = require('fs');
-
 const express = require('express');
+const { cartManager, router } = require("./carts.js");
 const http = require('http');
-
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-
+app.use('/carts.json', router); 
 const server = http.createServer(app);
 
 server.listen(8080, () => {
@@ -106,44 +107,44 @@ class ProductManager {
 const productManager = new ProductManager('./archivo.json');
 
 
-productManager.addProduct({
-    title: "Producto 1",
-    description: "Descripcion de producto 1",
-    price: 39.50,
-    thumbnail: "ruta/imagen1.jpg",
-    code: "P1",
-    stock: 10
-});
+// productManager.addProduct({
+//     title: "Producto 1",
+//     description: "Descripcion de producto 1",
+//     price: 39.50,
+//     thumbnail: "ruta/imagen1.jpg",
+//     code: "P1",
+//     stock: 10
+// });
 
-productManager.addProduct({
-    title: "Producto 2",
-    description: "Descripcion de producto 2",
-    price: 50.80,
-    thumbnail: "ruta/imagen2.jpg",
-    code: "P2",
-    stock: 5
-});
+// productManager.addProduct({
+//     title: "Producto 2",
+//     description: "Descripcion de producto 2",
+//     price: 50.80,
+//     thumbnail: "ruta/imagen2.jpg",
+//     code: "P2",
+//     stock: 5
+// });
 
-productManager.addProduct({
-    title: "Producto 3",
-    description: "Descripcion de producto 3",
-    price: 60,
-    thumbnail: "ruta/imagen3.jpg",
-    code: "P3",
-    stock: 8
-});
+// productManager.addProduct({
+//     title: "Producto 3",
+//     description: "Descripcion de producto 3",
+//     price: 60,
+//     thumbnail: "ruta/imagen3.jpg",
+//     code: "P3",
+//     stock: 8
+// });
 
-console.log("Lista de productos:", productManager.getProducts());
+// console.log("Lista de productos:", productManager.getProducts());
 
-const productById = productManager.getProductById(3);
-if (productById) {
-    console.log("Producto encontrado", productById);
-}
+// const productById = productManager.getProductById(3);
+// if (productById) {
+//     console.log("Producto encontrado", productById);
+// }
 
-productManager.updateProduct(2, {
-    title: "Producto 2 Actualizado",
-    price: 55.00
-});
+// productManager.updateProduct(2, {
+//     title: "Producto 2 Actualizado",
+//     price: 55.00
+// });
 
 app.get('/', (req, res) => {
     res.send( ' esta es la pag principal ');
@@ -164,6 +165,24 @@ app.get('/productos/:id', (req, res) => {
     }
         res.send (productId);
   });
+
+
+ 
+
+app.post('/cart', (req, res) => {
+   
+    cartManager.addCart();
+    res.status(200).json({ success: 'El carrito fue creado' });
+});
+
+
+
+// app.get('/cart', (req, res) => {
+   
+//     res.send (cartManager.getCart());
+// });
+
+  
 
 // productManager.deleteProduct(1);
 
