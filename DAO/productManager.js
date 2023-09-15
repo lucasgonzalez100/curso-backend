@@ -1,10 +1,4 @@
 const fs = require('fs');
-const express = require('express');
-const router = express.Router();
-
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
-
 
 class ProductManager {
     constructor(filePath) {
@@ -22,7 +16,7 @@ class ProductManager {
             if (this.products.length > 0) {
                 const maxId = Math.max(...this.products.map(product => product.id));
                 this.nextId = maxId + 1;
-                //  this.nextId = this.carts.length + 1;
+               
             }
         } catch (error) {
             this.products = [];
@@ -107,6 +101,6 @@ class ProductManager {
 
 
 
-const productManager = new ProductManager('./archivo.json');
+// const productManager = new ProductManager('../data/archivo.json');
 
-module.exports = { productManager, router };
+module.exports =  ProductManager

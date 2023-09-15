@@ -1,9 +1,4 @@
 const fs = require('fs');
-const express = require('express');
-const router = express.Router();
-
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
 
 class carts {
     constructor(filePath) {
@@ -20,7 +15,6 @@ class carts {
             if (this.carts.length > 0) {
                 const maxId = Math.max(...this.carts.map(cart => cart.id));
                 this.nextId = maxId + 1;
-                //  this.nextId = this.carts.length + 1;
             }
         }
         catch (error) {
@@ -69,9 +63,4 @@ class carts {
 
 
 
-
-
-const cartManager = new carts("./cart.json");
-
-module.exports = { cartManager, router };
-
+module.exports = carts
