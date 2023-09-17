@@ -26,8 +26,9 @@ router.post('/productos/add', (req, res) => {
   
   
   router.get('/productos', (req, res) => {
+    let products = productManager.getProducts();
   
-      res.send(productManager.getProducts());
+      res.render('home', { productos: products });
   });
   
   router.get('/productos/:id', (req, res) => {

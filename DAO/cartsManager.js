@@ -61,6 +61,4 @@ class carts {
     }
 }
 
-
-
 module.exports = carts
