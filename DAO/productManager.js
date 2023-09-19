@@ -100,7 +100,4 @@ class ProductManager {
 }
 
 
-
-// const productManager = new ProductManager('../data/archivo.json');
-
 module.exports =  ProductManager

@@ -1,28 +1,35 @@
-
 const express = require('express');
-const productsRouter = require('./Routes/products');
-const cartsRouter = require('./Routes/carts');
+const router = express.Router();
+
+const {createServer} = require('http');
+const {Server} = require('socket.io');
 const exphbs = require('express-handlebars');
 
-const http = require('http');
-// const { title } = require('process');
+const productsRouter = require('./Routes/products');
+const cartsRouter = require('./Routes/carts');
 
 const app = express();
-app.use(express.static('public'));
-app.engine('handlebars', exphbs.engine());
-app.set('view engine', 'handlebars');
-app.use(express.static('public'));
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+      // Emitir un evento al cliente
+    socket.emit("nuevo-mensaje", "¡Hola desde el servidor con socket!");
+  });
+  
+
+httpServer.listen(8080, () => {
+    console.log("Servidor escuchando en el puerto 8080");
+});
+
+app.use('/', productsRouter);
+
+app.use('/api', cartsRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.engine('handlebars', exphbs.engine());
+app.set('view engine', 'handlebars');
 
-app.use('/api', productsRouter);
-app.use('/api', cartsRouter);
-
-const server = http.createServer(app);
-
-server.listen(8080, () => {
-    console.log('Escuchando en el puerto 8080');
-});
-
-
+module.exports = { app, httpServer, io };
