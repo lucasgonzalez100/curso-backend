@@ -29,17 +29,26 @@ document.getElementById('yourFormId').addEventListener('submit', function (event
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+
+  } )
   .then(response => response.json())
 
   .then(data => {
     if (data.mensaje === 'Producto agregado correctamente') {
       // Si la respuesta del servidor es un éxito, muestra una alerta de éxito con SweetAlert2.
+    //   Swal.fire({
+    //     icon: 'success',
+    //     title: 'Éxito',
+    //     text: data.mensaje,
+    //   });
+
       Swal.fire({
+        position: 'top-end',
         icon: 'success',
-        title: 'Éxito',
-        text: data.mensaje,
-      });
+        title:  data.mensaje,
+        showConfirmButton: false,
+        timer: 1500
+      })
 
     } else {
       // Si la respuesta del servidor es un error, muestra una alerta de error con SweetAlert2.
@@ -50,4 +59,48 @@ document.getElementById('yourFormId').addEventListener('submit', function (event
       });
     }
   });
+});
+
+
+document.getElementById('FormDelete').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const id = document.getElementById('id').value;
+    console.log(id)
+
+    fetch(`http://localhost:8080/realProducts/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.mensaje === 'Producto eliminado correctamente') {
+            // Si la respuesta del servidor es un éxito, muestra una alerta de éxito con SweetAlert2.
+            Swal.fire({
+                title: 'Poducto encontrado',
+                text: "Estas seguro que deseas eliminarlo",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )
+                }
+              })
+        } else {
+            // Si la respuesta del servidor es un error, muestra una alerta de error con SweetAlert2.
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.mensaje,
+            });
+        }
+    });
 });

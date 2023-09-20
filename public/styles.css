@@ -77,3 +77,23 @@ button[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
 }
+
+
+
+.comand-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .comand-card {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin: 10px;
+    flex: 1; /* Hace que los elementos ocupen el mismo espacio */
+    max-width: 400px; /* Puedes ajustar este valor según tus necesidades */
+  }

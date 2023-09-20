@@ -1,5 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const {createServer} = require('http');
 const {Server} = require('socket.io');
@@ -8,7 +10,7 @@ const exphbs = require('express-handlebars');
 const productsRouter = require('./Routes/products');
 const cartsRouter = require('./Routes/carts');
 
-const app = express();
+
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
@@ -26,8 +28,6 @@ app.use('/', productsRouter);
 
 app.use('/api', cartsRouter);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
