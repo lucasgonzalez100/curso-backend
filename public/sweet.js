@@ -19,9 +19,7 @@ document.getElementById('yourFormId').addEventListener('submit', function (event
      code: code,
      stock: stock
    };
-  
-   console.log(productData)
-  
+    
 
   fetch("http://localhost:8080/realProducts", {
     method: 'POST',
