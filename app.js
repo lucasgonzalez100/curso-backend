@@ -4,7 +4,6 @@ const app = express();
 const httpServer = require('http').createServer(app);
 const {Server} = require('socket.io');
 
-
 const server = httpServer.listen(8080, () => {
   console.log("Servidor escuchando en el puerto 8080");
 });
@@ -23,15 +22,19 @@ const io = new Server (server);
 io.on('connection', socket=>{
   console.log("nuevo cliente conectado")
 
-})
-
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado.');
+  });
+});
 const productsRouter = require('./Routes/products')(io);
 const cartsRouter = require('./Routes/carts');
 
 app.use('/', productsRouter);
-
 app.use('/api', cartsRouter);
 
+// Configuración de archivos estáticos y Handlebars
 app.use(express.static('public'));
+
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
+

@@ -10,7 +10,10 @@ router.use(bodyParser.json());
 
 router.get('/realProducts',(req, res) => {
   let products = productManager.getProducts();
-      res.render('realTimeProducts',{ productos: products });
+  let reversedProducts = products.reverse();
+    res.render('realTimeProducts', { productos: reversedProducts });
+    //   res.render('realTimeProducts',{ productos: products });
+      
     });
 
     router.post('/realProducts', (req, res) => {

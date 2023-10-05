@@ -28,7 +28,7 @@
 
 <div class="comand-card">
     <h1>Editar Producto</h1>
-    <form id="editForm" action="updateProduct" method="POST">
+    <form id="editForm" action="realProducts" method="POST">
         <!-- Agrega un campo oculto para almacenar el ID del producto que se va a editar -->
         <input type="hidden" id="productId" name="productId" value="ID_DEL_PRODUCTO_A_EDITAR">
 
@@ -72,7 +72,7 @@
 <div class="product-container">
     {{#each productos}}
     <div class="product-card">
-        <img src={{thumbnail}} alt={{title}}>
+        {{!-- <img src={{thumbnail}} alt={{title}}> --}}
         <h2>{{title}}</h2>
         <p>{{description}}</p>
         <p>Precio: {{price}}</p>
@@ -83,6 +83,5 @@
     {{/each}}
 
 </div>
-<script src="http://localhost:8080/socket.io/socket.io.js"></script>
-
- 
+  <script src="/socket.io/socket.io.js"></script>
+<script src="./usuarioSocket.js"></script> 
