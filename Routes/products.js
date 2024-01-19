@@ -12,7 +12,7 @@ router.get('/realProducts',(req, res) => {
   let products = productManager.getProducts();
   let reversedProducts = products.reverse();
     res.render('realTimeProducts', { productos: reversedProducts });
-    //   res.render('realTimeProducts',{ productos: products });
+
       
     });
 

@@ -5,6 +5,7 @@ socket.on('producto_agregado', (product) => {
 
  
     });
+    
 // const  ProductManager  = require('../DAO/productManager.js');
 // const productManager = new ProductManager('../data/archivo.json');
 
