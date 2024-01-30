@@ -1,16 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Definir el esquema del usuario
-const userColletion = "usuario" 
+const userCollection = "usuario";
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  // Otros campos que puedas necesitar
 });
 
-// Crear un modelo a partir del esquema
-const User = mongoose.model( userColletion , userSchema);
+userSchema.methods.guardar = function() {
+  return this.save()
+    .then(resultado => {
+      console.log(resultado);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+const User = mongoose.model(userCollection, userSchema);
 
 module.exports = User;
