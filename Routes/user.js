@@ -14,19 +14,30 @@ router.get('/',async(req,res)=>{
   }
 })
 
-router.post ('/post', async(req, res)=>{
-  const {username,email,password} = req.body;
-  if (!username ||  !password || !email){
-    res.status(400).json({ mensaje: 'Es necesario completar todos los campos' });
-  }
-  let result = await User.create({
-    username,
-    email,
-    password
-  });
-  res.send({status:"success",playload:result})
-} )
+router.get('/post',(req, res) => {
+  
+    res.render('formUser');
 
+    });
+
+    router.post('/post', async (req, res) => {
+      const { username, password, email } = req.body;
+      
+      if (!username || !password || !email) {
+        return res.status(400).json({ mensaje: 'Es necesario completar todos los campos' });
+      }
+    
+      // Crear una nueva instancia del modelo User
+      const user = new User({ username, password, email });
+    
+      try {
+        // Guardar el usuario en la base de datos
+        const result = await user.guardar();
+        res.send({ status: "success", payload: result });
+      } catch (error) {
+        res.status(500).send({ status: "error", message: error.message });
+      }
+    });
 module.exports = router;
 
 

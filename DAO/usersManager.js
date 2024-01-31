@@ -8,16 +8,16 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
 });
 
-userSchema.methods.guardar = function() {
-  return this.save()
-    .then(resultado => {
-      console.log(resultado);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-}
-
+userSchema.methods.guardar = async function() {
+  try {
+    const resultado = await this.save();
+    console.log(resultado);
+    return resultado;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 const User = mongoose.model(userCollection, userSchema);
 
 module.exports = User;

@@ -5,8 +5,18 @@ const httpServer = require('http').createServer(app);
 const {Server} = require('socket.io');
 const userRouter = require('./Routes/user.js')
 const  mongoose  = require('mongoose');
+// const session = require ('express-session');
+// const FileStore = require ('session-file-store');
 
-
+// const fileStore= FileStore(session)
+// app.use(session({
+//   secret:'CoderHouse',
+//   store: MongoStore.create({
+//     mongoUrl:'mongodb+srv://gonzalezlucasnicolas69:123@cluster0.xi8psab.mongodb.net/?retryWrites=true&w=majority'
+//   }),
+//   ttl:25,
+//   saveUninitialized: true
+// }));
 
 const server = httpServer.listen(8080, () => {
   console.log("Servidor escuchando en el puerto 8080");
