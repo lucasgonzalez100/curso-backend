@@ -1,0 +1,16 @@
+<h1>Lista de usuarios </h1>
+
+
+<div class="product-container">
+    {{#each usuarios}}
+    <div class="product-card">
+        <p>Nombre:{{username}} </p>
+        <p>Email: {{email}}</p>
+        <p>Role: {{role}}</p>
+        <form action="/eliminarUsuario" method="POST" class="form">
+            <input type="hidden" name="userId" value="{{this._id}}">
+            <button type="submit" class="button">Eliminar usuario</button>
+        </form>
+    </div>
+    {{/each}}
+</div>
