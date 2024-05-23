@@ -6,7 +6,6 @@ const {Server} = require('socket.io');
 const userRouter = require('./Routes/userRoutes.js')
 const  mongoose  = require('mongoose');
 const dotenv = require('dotenv');
-
 dotenv.config();
 // const session = require ('express-session');
 // const FileStore = require ('session-file-store');
