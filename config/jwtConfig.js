@@ -1,9 +1,12 @@
 const jwk = require('jsonwebtoken');
 
-const PRIVATE_KEY = 'C0d3rh0us3';
+const dotenv = require('dotenv');
+dotenv.config();
+
+const keySing = process.env.PRIVATE_KEY
 
  const generateToken = (user) => {
-    const token = jwk.sign({user}, PRIVATE_KEY, {expiresIn: '24h'});
+    const token = jwk.sign({user}, keySing, {expiresIn: '48h'});
     return token;
 }
 
@@ -13,7 +16,7 @@ const PRIVATE_KEY = 'C0d3rh0us3';
         return res.status(401).send({message: 'Not authenticated'});
     }
     const token = authHeader.split(' ')[1];
-    jwk.verify(token, PRIVATE_KEY, (error, credentials) => {
+    jwk.verify(token, keySing, (error, credentials) => {
         if(error){
             return res.status(401).send({message: 'Not authenticated'});
         }

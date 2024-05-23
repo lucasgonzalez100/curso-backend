@@ -6,6 +6,7 @@ const initializePassport  = require('../config/passportConfig.js');
 const { generateToken ,authToken } = require('../config/jwtConfig.js');
 const passport = require('passport');
 
+initializePassport();
 
 router.get('/', async (req, res) => {
   try {
@@ -21,8 +22,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    await User.findByIdAndRemove(req.body.userId);
-    res.redirect('/');
+    const userEmail = req.body.email; 
+    const user = await User.findOneAndDelete({ email: userEmail });
+    res.status(201).send({ success: "Usuario eliminado", message: user });
   } catch (error) {
     console.log("Error al eliminar usuario: " + error);
     res.status(500).send({ result: "error", message: "Error al eliminar usuario" });
@@ -30,7 +32,6 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-
   res.render('register');
 });
 
@@ -48,9 +49,6 @@ router.post('/register', async (req, res) => {
     delete user.password;
     const accessToken = generateToken(user);
     res.status(201).send({accessToken, message: 'Created',payload: result});
-
-
-    // res.send({ status: "success", payload: result });
   } catch (error) {
     res.status(500).send({ status: "error", message: error.message });
   }
@@ -70,28 +68,11 @@ router.post("/login", async (req, res) => {
   user.password = '';
   const accessToken = generateToken(user);
   if (user) {
-    // Acceder a los datos del usuario encontrado
     const { username, } = user;
 
   res.render('welcome', { user, status: 'success', accessToken });
-  // res.redirect("/",{ status: 'success' });
   }
 });
 
-// router.post( "/login",
-// passport.authenticate("login", { failureRedirect: "/faillogin" }),
-//     async (req, res) => {
-//       if (!req.user) {
-//         return res.status(400).send({ message: "Error with credentials" });
-//       }
-//       req.session.user = {
-//         first_name: req.user.first_name,
-//         last_name: req.user.last_name,
-//         age: req.user.age,
-//         email: req.user.email,
-//       };
-//       res.redirect("/welcome");
-//     }
-//   );
 
 module.exports = router;

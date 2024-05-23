@@ -7,9 +7,20 @@
         <p>Nombre:{{username}} </p>
         <p>Email: {{email}}</p>
         <p>Role: {{role}}</p>
-        <form action="/eliminarUsuario" method="POST" class="form">
-            <input type="hidden" name="userId" value="{{this._id}}">
+        <form action="" method="POST" class="form">
+            <input type="hidden" name="email" value="{{email}}">
             <button type="submit" class="button">Eliminar usuario</button>
+        </form>
+        <form action="/cambiar-rol" method="POST" class="form">
+            <input type="hidden" name="email" value="{{email}}">
+            <select name="nuevoRol">
+
+                <option value="usuario">Usuario</option>
+                <option value="usuario_premium">Usuario premium</option>
+                <option value="admin">Administrador</option>
+
+            </select>
+            <button type="submit" class="button">Cambiar rol</button>
         </form>
     </div>
     {{/each}}

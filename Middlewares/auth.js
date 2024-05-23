@@ -1,13 +1,14 @@
-export const checkAuth = (req, res, next) => {
+ const checkAuth = (req, res, next) => {
     if(!req.session.user){
         return res.redirect('/login');
     }
     next();
 } 
 
-export const checkExistingUser = (req, res, next) => {
+ const checkExistingUser = (req, res, next) => {
     if(req.session.user){
         return res.redirect('/');
     }
     next();
 }
+module.exports = { checkAuth,checkExistingUser};

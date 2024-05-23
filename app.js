@@ -5,6 +5,9 @@ const httpServer = require('http').createServer(app);
 const {Server} = require('socket.io');
 const userRouter = require('./Routes/userRoutes.js')
 const  mongoose  = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
 // const session = require ('express-session');
 // const FileStore = require ('session-file-store');
 
@@ -14,7 +17,7 @@ const  mongoose  = require('mongoose');
 //   store: MongoStore.create({
 //     mongoUrl:'mongodb+srv://gonzalezlucasnicolas69:123@cluster0.xi8psab.mongodb.net/?retryWrites=true&w=majority'
 //   }),
-//   ttl:25,
+//   resave: true,
 //   saveUninitialized: true
 // }));
 
@@ -33,7 +36,7 @@ const exphbs = require('express-handlebars');
 
 const connectToMongo = async () => {
   try {
-    await mongoose.connect('mongodb+srv://gonzalezlucasnicolas69:123@cluster0.xi8psab.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    await mongoose.connect(process.env.MONGO_URI);
     console.log('Conectado a MongoDB');
   } catch (error) {
     console.log("No se pudo conectar la base de datos : " + error);
